@@ -1,7 +1,7 @@
 import HttpStatus from "http-status-codes";
 import { NextFunction, Request, Response } from "express";
 
-import badRequestError from "../errors/badRequestError";
+import BadRequestError from "../errors/badRequestError";
 
 export function genericErrorHandler(
   err: Error,
@@ -9,7 +9,7 @@ export function genericErrorHandler(
   res: Response,
   _next: NextFunction // eslint-disable-line
 ) {
-  if (err instanceof badRequestError) {
+  if (err instanceof BadRequestError) {
     return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
   }
   return res

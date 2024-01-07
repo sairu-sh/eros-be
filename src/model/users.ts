@@ -5,7 +5,14 @@ export default class ProjectModel extends BaseModel {
     const query = this.queryBuilder()
       .select("*")
       .table("users")
-      .where({ username: params.username });
+      .where((builder) => {
+        if (params.username) {
+          builder.where({ username: params.username });
+        }
+        if (params.email) {
+          builder.orWhere({ email: params.email });
+        }
+      });
     return (await query).length > 0 ? true : false;
   }
   static async createUser(params: any) {

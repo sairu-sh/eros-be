@@ -9,7 +9,7 @@ app.use(express.json());
 
 app.use(routes);
 
-// app.use(genericErrorHandler);
+app.use(genericErrorHandler);
 
 console.log("listening on port:", serverConfig.serverPort);
 
