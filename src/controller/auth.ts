@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { signUP } from "../service/auth";
+import * as authService from "../service/auth";
 import { error } from "console";
 
 export const signup = async (
@@ -8,10 +8,25 @@ export const signup = async (
   next: NextFunction
 ) => {
   try {
-    await signUP(req.body);
+    await authService.signUP(req.body);
     return res.status(200).json({
       message: "User created successfully",
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { body } = req;
+    const data = await authService.login(body);
+
+    return res.json(data);
   } catch (error) {
     next(error);
   }
