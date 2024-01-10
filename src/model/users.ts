@@ -16,8 +16,12 @@ export default class ProjectModel extends BaseModel {
     return query?.[0];
   }
   static async createUser(params: any) {
-    const query = this.queryBuilder().insert(params).table("users");
-    return query;
+    const query = this.queryBuilder()
+      .insert(params)
+      .table("users")
+      .returning("id");
+    const [userId] = await query;
+    return userId;
   }
 
   static async getByEmail(email: string) {

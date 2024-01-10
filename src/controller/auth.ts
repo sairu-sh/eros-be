@@ -8,8 +8,9 @@ export const signup = async (
   next: NextFunction
 ) => {
   try {
-    await authService.signUP(req.body);
+    const data = await authService.signUP(req.body);
     return res.status(200).json({
+      id: data.id,
       message: "User created successfully",
     });
   } catch (error) {
