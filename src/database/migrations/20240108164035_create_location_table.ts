@@ -1,6 +1,6 @@
 import { Knex } from "knex";
 
-const TABLE_NAME = "users";
+const TABLE_NAME = "locations";
 
 /**
  * Create table TABLE_NAME.
@@ -12,13 +12,13 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable(TABLE_NAME, (table) => {
     table.bigIncrements();
 
-    table.string("fullname").notNullable();
+    table.double("latitude").notNullable().defaultTo(0);
 
-    table.string("username").notNullable().unique();
+    table.double("longitude").notNullable().defaultTo(0);
 
-    table.string("email").notNullable().unique();
+    table.string("city").notNullable().defaultTo("");
 
-    table.string("password").notNullable();
+    table.string("country").notNullable();
 
     table.timestamp("created_at").notNullable().defaultTo(knex.raw("now()"));
 
