@@ -44,9 +44,11 @@ export default class UserDetailsModel extends BaseModel {
         .insert(params)
         .table("locations")
         .returning("id");
+      if (!result || result.length === 0 || !result[0].id) {
+        throw new Error("Insertion failed. Missing ID in the response.");
+      }
       return result;
     } catch (error) {
-      console.error("Error during user location insertion:", error);
       return null;
     }
   }

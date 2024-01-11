@@ -15,15 +15,14 @@ export const auth = async (req: any, _res: Response, next: NextFunction) => {
 
     const decode = jwt.verify(
       token,
-      config.jwt.accessTokenSecret!,
-      (err, user) => {
-        if (err) _res.sendStatus(403);
-        (req as any).user = user;
-        next();
-      }
+      config.jwt.accessTokenSecret!
+      // (err, user) => {
+      //   if (err) _res.sendStatus(403);
+      //   (req as any).user = user;
+      //   next();
+      // }
     );
     req.user = decode;
-
     next();
   } catch (err) {
     next(err);
