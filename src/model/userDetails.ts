@@ -27,8 +27,7 @@ export default class UserDetailsModel extends BaseModel {
             uid,
             interest: id,
           })
-          .table("user_interests")
-          .returning("id");
+          .table("user_interests");
       });
 
       await Promise.all(promises);
@@ -36,6 +35,21 @@ export default class UserDetailsModel extends BaseModel {
     } catch (error) {
       console.error("Error during interests insertion:", error);
       throw new Error("Failed to add interests");
+    }
+  }
+
+  static async addLocation(params: { city: string; country: string }) {
+    try {
+      const result: { id: any }[] | null = await this.queryBuilder()
+        .insert(params)
+        .table("locations")
+        .returning("id");
+      if (!result || result.length === 0 || !result[0].id) {
+        throw new Error("Insertion failed. Missing ID in the response.");
+      }
+      return result;
+    } catch (error) {
+      return null;
     }
   }
 }

@@ -1,2 +1,2 @@
-export const ACCESS_TOKEN_EXPIRY = 10000;
-export const REFRESH_TOKEN_EXPIRY = 10000;
+export const ACCESS_TOKEN_EXPIRY = 600000;
+export const REFRESH_TOKEN_EXPIRY = 600000;

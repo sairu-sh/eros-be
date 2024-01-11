@@ -23,15 +23,22 @@ export async function up(knex: Knex): Promise<void> {
       .notNullable()
       .defaultTo(1)
       .references("id")
-      .inTable("locations");
+      .inTable("locations")
+      .onDelete("cascade");
 
-    table.integer("gender").notNullable().references("id").inTable("genders");
+    table
+      .integer("gender")
+      .notNullable()
+      .references("id")
+      .inTable("genders")
+      .onDelete("cascade");
 
     table
       .integer("prefered_gender")
       .notNullable()
       .references("id")
-      .inTable("genders");
+      .inTable("genders")
+      .onDelete("cascade");
 
     table.integer("prefered_age").notNullable().defaultTo(18);
 

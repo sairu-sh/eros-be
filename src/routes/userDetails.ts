@@ -3,6 +3,6 @@ import { createDetails } from "../controller/userDetails";
 
 const router = Router();
 
-router.post("/:id", createDetails);
+router.post("/", createDetails);
 
 export default router;
