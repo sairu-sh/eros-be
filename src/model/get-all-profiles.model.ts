@@ -1,7 +1,11 @@
 import BaseModel from "./baseModel";
+import {
+  PaginationQuery,
+  PaginationParam,
+} from "../interfaces/pagination.interface";
 
 export default class ProfileModel extends BaseModel {
-  static async getAllProfiles(id: number) {
+  static async getAllProfiles(id: number, params: PaginationParam) {
     //get the user's gender preference
     const preference = await this.queryBuilder()
       .select("prefered_gender", "prefered_age")
@@ -19,7 +23,7 @@ export default class ProfileModel extends BaseModel {
     const currentYear: number = new Date().getFullYear();
     const minBirthYear: number = currentYear - preference.preferedAge;
 
-    const profiles = await this.queryBuilder()
+    const profiles = this.queryBuilder()
       .select(
         this.queryBuilder().raw("CAST(users.id AS INTEGER) as uid"),
         "users.fullname as fullname",
@@ -40,9 +44,20 @@ export default class ProfileModel extends BaseModel {
         }
       });
 
+    profiles.offset(params.offset).limit(params.limit);
+
     if (!profiles) {
       throw new Error("Could not get profiles");
     }
     return profiles;
+  }
+
+  static countAll(params: PaginationParam) {
+    const query = this.queryBuilder()
+      .table("projects")
+      .count({ count: "id" })
+      .first();
+
+    return query;
   }
 }
