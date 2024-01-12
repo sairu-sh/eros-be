@@ -18,12 +18,18 @@ export default class ProfileModel extends BaseModel {
     //calculate the minimum dob for the user to be older than the prefered age
     const currentYear: number = new Date().getFullYear();
     const minBirthYear: number = currentYear - preference.preferedAge;
-    console.log(minBirthYear);
 
     const profiles = await this.queryBuilder()
-      .select("users.fullname as fullname", "user_details.dob as dob")
+      .select(
+        this.queryBuilder().raw("CAST(users.id AS INTEGER) as uid"),
+        "users.fullname as fullname",
+        "user_details.dob as dob",
+        "locations.latitude as lat",
+        "locations.longitude as long"
+      )
       .from("users")
       .leftJoin("user_details", "users.id", "=", "user_details.uid")
+      .leftJoin("locations", "user_details.location", "=", "locations.id")
       .where((builder) => {
         builder
           .where("user_details.uid", "!=", id)
