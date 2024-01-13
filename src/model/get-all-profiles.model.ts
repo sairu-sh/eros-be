@@ -7,22 +7,22 @@ import {
 export default class ProfileModel extends BaseModel {
   static async getAllProfiles(id: number, params: PaginationParam) {
     //get the user's gender preference
-    const preference = await this.queryBuilder()
-      .select("prefered_gender", "prefered_age")
+    const details = await this.queryBuilder()
+      .select("prefered_gender", "prefered_age", "latitude", "longitude")
       .table("user_details")
+      .leftJoin("locations", "user_details.location", "=", " locations.id")
       .where({ uid: id })
       .first();
 
     // check if the user's preference is a singe gender or both
     let gender: number | null;
-    if (preference.preferedGender === 3) {
+    if (details.preferedGender === 3) {
       gender = null;
-    } else gender = preference.preferedGender;
+    } else gender = details.preferedGender;
 
     //calculate the minimum dob for the user to be older than the prefered age
     const currentYear: number = new Date().getFullYear();
-    const minBirthYear: number = currentYear - preference.preferedAge;
-
+    const minBirthYear: number = currentYear - details.preferedAge;
     const profiles = this.queryBuilder()
       .select(
         this.queryBuilder().raw("CAST(users.id AS INTEGER) as uid"),
@@ -30,6 +30,19 @@ export default class ProfileModel extends BaseModel {
         "user_details.dob as dob",
         "locations.latitude as lat",
         "locations.longitude as long"
+      )
+      .select(
+        this.queryBuilder().raw(`
+        (6371 * 
+          acos(
+            cos(radians(${details.latitude})) * 
+            cos(radians(locations.latitude)) * 
+            cos(radians(locations.longitude) - 
+            radians(${details.longitude})) + 
+            sin(radians(${details.latitude})) * 
+            sin(radians(locations.latitude))
+          )
+        ) as distance`)
       )
       .from("users")
       .leftJoin("user_details", "users.id", "=", "user_details.uid")
@@ -42,7 +55,8 @@ export default class ProfileModel extends BaseModel {
         if (gender) {
           builder.where("user_details.gender", "=", gender);
         }
-      });
+      })
+      .orderBy("distance", "asc");
 
     profiles.offset(params.offset).limit(params.limit);
 
