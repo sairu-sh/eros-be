@@ -1,7 +1,11 @@
 import BaseModel from "./baseModel";
+import {
+  PaginationQuery,
+  PaginationParam,
+} from "../interfaces/pagination.interface";
 
 export default class ProfileModel extends BaseModel {
-  static async getAllProfiles(id: number) {
+  static async getAllProfiles(id: number, params: PaginationParam) {
     //get the user's gender preference
     const preference = await this.queryBuilder()
       .select("prefered_gender", "prefered_age")
@@ -18,12 +22,18 @@ export default class ProfileModel extends BaseModel {
     //calculate the minimum dob for the user to be older than the prefered age
     const currentYear: number = new Date().getFullYear();
     const minBirthYear: number = currentYear - preference.preferedAge;
-    console.log(minBirthYear);
 
-    const profiles = await this.queryBuilder()
-      .select("users.fullname as fullname", "user_details.dob as dob")
+    const profiles = this.queryBuilder()
+      .select(
+        this.queryBuilder().raw("CAST(users.id AS INTEGER) as uid"),
+        "users.fullname as fullname",
+        "user_details.dob as dob",
+        "locations.latitude as lat",
+        "locations.longitude as long"
+      )
       .from("users")
       .leftJoin("user_details", "users.id", "=", "user_details.uid")
+      .leftJoin("locations", "user_details.location", "=", "locations.id")
       .where((builder) => {
         builder
           .where("user_details.uid", "!=", id)
@@ -34,9 +44,20 @@ export default class ProfileModel extends BaseModel {
         }
       });
 
+    profiles.offset(params.offset).limit(params.limit);
+
     if (!profiles) {
       throw new Error("Could not get profiles");
     }
     return profiles;
+  }
+
+  static countAll(params: PaginationParam) {
+    const query = this.queryBuilder()
+      .table("projects")
+      .count({ count: "id" })
+      .first();
+
+    return query;
   }
 }
