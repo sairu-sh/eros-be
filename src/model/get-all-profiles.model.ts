@@ -26,20 +26,26 @@ export default class ProfileModel extends BaseModel {
         "users.fullname as fullname",
         "user_details.dob as dob",
         "locations.latitude as lat",
-        "locations.longitude as long"
+        "locations.longitude as long",
+        this.queryBuilder()
+          .select("url")
+          .from("images")
+          .whereRaw("images.uid = users.id")
+          .limit(1)
+          .as("image_url")
       )
       .select(
         this.queryBuilder().raw(`
-        (6371 * 
-          acos(
-            cos(radians(${details.latitude})) * 
-            cos(radians(locations.latitude)) * 
-            cos(radians(locations.longitude) - 
-            radians(${details.longitude})) + 
-            sin(radians(${details.latitude})) * 
-            sin(radians(locations.latitude))
-          )
-        ) as distance`)
+      (6371 * 
+        acos(
+          cos(radians(${details.latitude})) * 
+          cos(radians(locations.latitude)) * 
+          cos(radians(locations.longitude) - 
+          radians(${details.longitude})) + 
+          sin(radians(${details.latitude})) * 
+          sin(radians(locations.latitude))
+        )
+      ) as distance`)
       )
       .from("users")
       .leftJoin("user_details", "users.id", "=", "user_details.uid")
@@ -48,7 +54,7 @@ export default class ProfileModel extends BaseModel {
         builder
           .where("user_details.uid", "!=", id)
           .whereRaw(`EXTRACT(YEAR FROM(user_details.dob)) <= ${minBirthYear}`);
-        //if the user's gender preference is either male or female, filter accordingly
+        // If the user's gender preference is either male or female, filter accordingly
         if (gender) {
           builder.where("user_details.gender", "=", gender);
         }
