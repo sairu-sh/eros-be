@@ -1,11 +1,8 @@
 import BaseModel from "./baseModel";
-import {
-  PaginationQuery,
-  PaginationParam,
-} from "../interfaces/pagination.interface";
+import { IPaginationParam } from "../interfaces/pagination.interface";
 
 export default class ProfileModel extends BaseModel {
-  static async getAllProfiles(id: number, params: PaginationParam) {
+  static async getAllProfiles(id: number, params: IPaginationParam) {
     //get the user's gender preference
     const details = await this.queryBuilder()
       .select("prefered_gender", "prefered_age", "latitude", "longitude")
@@ -66,7 +63,7 @@ export default class ProfileModel extends BaseModel {
     return profiles;
   }
 
-  static countAll(params: PaginationParam) {
+  static countAll(params: IPaginationParam) {
     const query = this.queryBuilder()
       .table("projects")
       .count({ count: "id" })

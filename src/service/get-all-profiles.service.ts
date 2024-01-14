@@ -1,9 +1,9 @@
 import ProfileModel from "../model/get-all-profiles.model";
 import NotFoundError from "../errors/notFoundError";
-import { PaginationQuery } from "../interfaces/pagination.interface";
+import { IPaginationQuery } from "../interfaces/pagination.interface";
 import { getPaginationOptions } from "../util/pagination.util";
 
-export const getAllProfiles = async (id: number, query: PaginationQuery) => {
+export const getAllProfiles = async (id: number, query: IPaginationQuery) => {
   try {
     const { page, size } = query;
 

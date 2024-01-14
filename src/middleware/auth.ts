@@ -13,15 +13,7 @@ export const auth = async (req: any, _res: Response, next: NextFunction) => {
       throw new UnauthenticatedError("No access token");
     }
 
-    const decode = jwt.verify(
-      token,
-      config.jwt.accessTokenSecret!
-      // (err, user) => {
-      //   if (err) _res.sendStatus(403);
-      //   (req as any).user = user;
-      //   next();
-      // }
-    );
+    const decode = jwt.verify(token, config.jwt.accessTokenSecret!);
     req.user = decode;
     next();
   } catch (err) {
