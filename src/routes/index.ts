@@ -7,6 +7,7 @@ import updateLocationRoutes from "./update-location.routes";
 import getProfileRoutes from "./get-profiles.routes";
 import getDetailsRoutes from "./get-details.routes";
 import imageUploadRoute from "./image-handler.routes";
+import matchRequest from "./match-request.routes";
 import { auth } from "../middleware/auth.middleware";
 
 const router = Router();
@@ -26,5 +27,7 @@ router.use("/get-profiles", auth, getProfileRoutes);
 router.use("/get-details", auth, getDetailsRoutes);
 
 router.use("/upload-image", auth, imageUploadRoute);
+
+router.use("/request", auth, matchRequest);
 
 export default router;

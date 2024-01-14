@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import * as updateLocationService from "../service/update-location.service";
 
 export const updateLocation = async (
