@@ -22,6 +22,13 @@ const serverConfig = {
     timezone: "UTC",
     user: process.env.DB_USER,
   },
+
+  cloudinary: {
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET,
+    secure: true,
+  },
 };
 
 export default serverConfig;

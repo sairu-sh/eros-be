@@ -1,4 +1,4 @@
-import BaseModel from "./baseModel";
+import BaseModel from "./base-model.model";
 
 export default class DetailsModel extends BaseModel {
   static async getDetails(id: number, uid: number) {

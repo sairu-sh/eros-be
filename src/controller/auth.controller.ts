@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import * as authService from "../service/auth";
+import * as authService from "../service/auth.service";
 import { error } from "console";
 
 export const signup = async (

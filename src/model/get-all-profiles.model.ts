@@ -1,4 +1,4 @@
-import BaseModel from "./baseModel";
+import BaseModel from "./base-model.model";
 import { IPaginationParam } from "../interfaces/pagination.interface";
 
 export default class ProfileModel extends BaseModel {

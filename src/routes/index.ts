@@ -1,12 +1,13 @@
 import { Router } from "express";
-import authRoutes from "./auth";
-import userRoutes from "./users";
-import userDetailsRoutes from "./userDetails";
-import interestRoutes from "./interests";
-import updateLocationRoutes from "./updateLocation";
+import authRoutes from "./auth.routes";
+import userRoutes from "./users.routes";
+import userDetailsRoutes from "./user-details.routes";
+import interestRoutes from "./interests.routes";
+import updateLocationRoutes from "./update-location.routes";
 import getProfileRoutes from "./get-profiles.routes";
 import getDetailsRoutes from "./get-details.routes";
-import { auth } from "./../middleware/auth";
+import imageUploadRoute from "./image-handler.routes";
+import { auth } from "../middleware/auth.middleware";
 
 const router = Router();
 
@@ -23,5 +24,7 @@ router.use("/update-location", auth, updateLocationRoutes);
 router.use("/get-profiles", auth, getProfileRoutes);
 
 router.use("/get-details", auth, getDetailsRoutes);
+
+router.use("/upload-image", auth, imageUploadRoute);
 
 export default router;
