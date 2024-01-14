@@ -19,21 +19,22 @@ export default class DetailsModel extends BaseModel {
         "locations.city",
         "locations.country",
         this.queryBuilder().raw(`
-      (6371 * 
-        acos(
-          cos(radians(${userPosition.latitude})) * 
-          cos(radians(locations.latitude)) * 
-          cos(radians(locations.longitude) - 
-          radians(${userPosition.longitude})) + 
-          sin(radians(${userPosition.latitude})) * 
-          sin(radians(locations.latitude))
-        )
-      ) as distance`)
+          (6371 * 
+            acos(
+              cos(radians(${userPosition.latitude})) * 
+              cos(radians(locations.latitude)) * 
+              cos(radians(locations.longitude) - 
+              radians(${userPosition.longitude})) + 
+              sin(radians(${userPosition.latitude})) * 
+              sin(radians(locations.latitude))
+            )
+          ) as distance`)
       )
       .select(
         this.queryBuilder().raw(
-          "JSON_ARRAYAGG(interests.interest) as interests"
-        )
+          "JSONB_AGG(DISTINCT interests.interest) as interests"
+        ),
+        this.queryBuilder().raw("JSONB_AGG(DISTINCT images.url) as imageUrls")
       )
       .from("user_details")
       .leftJoin("users", "user_details.uid", "=", "users.id")
@@ -41,6 +42,7 @@ export default class DetailsModel extends BaseModel {
       .leftJoin("locations", "user_details.location", "=", "locations.id")
       .leftJoin("user_interests", "user_details.uid", "=", "user_interests.uid")
       .leftJoin("interests", "user_interests.interest", "=", "interests.id")
+      .leftJoin("images", "images.uid", "=", "users.id") // Join with images table
       .where("user_details.uid", "=", id)
       .groupBy(
         "users.fullname",
