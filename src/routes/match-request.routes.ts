@@ -7,4 +7,6 @@ router.post("/", matchRequestController.sendRequest);
 
 router.delete("/", matchRequestController.deleteRequest);
 
+router.get("/", matchRequestController.getRequests);
+
 export default router;

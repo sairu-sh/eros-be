@@ -17,3 +17,11 @@ export const deleteRequest = async (params: IMatchRequest) => {
   }
   return query;
 };
+
+export const getAllRequests = async (id: number) => {
+  const query = await RequestsModel.getAllRequests(id);
+  if (!query) {
+    throw new BadRequestError("No requests found");
+  }
+  return query;
+};

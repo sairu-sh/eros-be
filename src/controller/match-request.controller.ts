@@ -17,3 +17,9 @@ export const deleteRequest = async (req: any, res: Response) => {
   });
   res.json(data);
 };
+
+export const getRequests = async (req: any, res: Response) => {
+  const id: number = req.user.id;
+  const data = await matchRequestService.getAllRequests(id);
+  res.json(data);
+};

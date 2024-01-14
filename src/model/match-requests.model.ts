@@ -2,8 +2,23 @@ import BaseModel from "./base-model.model";
 import { IMatchRequest } from "../interfaces/match-request.interface";
 
 export default class RequestsModel extends BaseModel {
-  static async getAllRequests() {
-    return this.queryBuilder().table("requests").select();
+  static async getAllRequests(id: number) {
+    return this.queryBuilder()
+      .select(
+        "users.id",
+        "users.fullname",
+        this.queryBuilder()
+          .select("url")
+          .from("images")
+          .whereRaw("images.uid = users.id")
+          .limit(1)
+          .as("image_url")
+      )
+      .table("requests")
+      .leftJoin("users", "requests.receiver_id", "=", "users.id")
+      .leftJoin("images", "users.id", "=", "images.uid")
+      .where("sender_id", "=", id)
+      .groupBy("users.id");
   }
 
   static async deleteRequest(params: IMatchRequest) {
