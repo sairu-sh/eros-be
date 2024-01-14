@@ -28,4 +28,12 @@ export default class RequestsModel extends BaseModel {
   static async createRequest(params: IMatchRequest) {
     return this.queryBuilder().insert(params).table("requests").returning("id");
   }
+
+  static async getRequest(params: IMatchRequest) {
+    return this.queryBuilder()
+      .select("id")
+      .table("requests")
+      .where(params)
+      .first();
+  }
 }

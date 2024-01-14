@@ -25,3 +25,11 @@ export const getAllRequests = async (id: number) => {
   }
   return query;
 };
+
+export const getRequest = async (params: IMatchRequest) => {
+  const query = await RequestsModel.getRequest(params);
+  if (!query) {
+    throw new BadRequestError("Request not found");
+  }
+  return query;
+};

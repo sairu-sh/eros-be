@@ -7,6 +7,8 @@ router.post("/", matchRequestController.sendRequest);
 
 router.delete("/", matchRequestController.deleteRequest);
 
-router.get("/", matchRequestController.getRequests);
+router.get("/", matchRequestController.getAllRequests);
+
+router.get("/:id", matchRequestController.getRequest);
 
 export default router;

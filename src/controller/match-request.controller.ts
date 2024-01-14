@@ -18,8 +18,15 @@ export const deleteRequest = async (req: any, res: Response) => {
   res.json(data);
 };
 
-export const getRequests = async (req: any, res: Response) => {
+export const getAllRequests = async (req: any, res: Response) => {
   const id: number = req.user.id;
   const data = await matchRequestService.getAllRequests(id);
+  res.json(data);
+};
+
+export const getRequest = async (req: any, res: Response) => {
+  const senderId: number = req.user.id;
+  const receiverId: number = req.params.id;
+  const data = await matchRequestService.getRequest({ senderId, receiverId });
   res.json(data);
 };
