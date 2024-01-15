@@ -62,8 +62,6 @@ export default class UserDetailsModel extends BaseModel {
         .table("user_details")
         .returning("location");
 
-      console.log(location);
-
       const result = await this.queryBuilder()
         .update({ city: params.city })
         .table("locations")

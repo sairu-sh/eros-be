@@ -1,4 +1,4 @@
-import { IChatParams } from "../interfaces/chats.interface";
+import { IChatInsertion, IChatParams } from "../interfaces/chats.interface";
 import BaseModel from "./base-model.model";
 
 export default class MatchModel extends BaseModel {
@@ -18,5 +18,16 @@ export default class MatchModel extends BaseModel {
           });
       })
       .orderBy("created_at", "desc");
+  }
+
+  static async createChat(params: IChatInsertion) {
+    return this.queryBuilder()
+      .insert({
+        sender_id: params.primaryUser,
+        receiver_id: params.secondaryUser,
+        content: params.content,
+      })
+      .table("chats")
+      .returning("id");
   }
 }

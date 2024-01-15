@@ -10,7 +10,6 @@ cloudinary.config({
 
 export const imageUploader = async (params: IImageParams) => {
   let response;
-  console.log(params.files);
   const filesArray = Array.isArray(params.files)
     ? params.files
     : [params.files];
@@ -45,7 +44,6 @@ export const getImageUrl = async (uid: number) => {
 };
 
 export const delImageUrl = async (uid: number, url: string) => {
-  console.log("service");
   try {
     const query = await ImageModel.delImage(uid, url);
     if (query) return true;
