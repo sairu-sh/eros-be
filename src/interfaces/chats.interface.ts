@@ -1,4 +1,4 @@
 export interface IChatParams {
-  senderId: number;
-  receiverId: number;
+  primaryUser: number;
+  secondaryUser: number;
 }
