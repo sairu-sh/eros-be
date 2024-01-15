@@ -11,8 +11,16 @@ export default class ImageModel extends BaseModel {
 
   static async getImageUrl(uid: number) {
     const query = await this.queryBuilder()
-      .select({ url: "url" })
+      .select({ url: "url", id: "id" })
       .where({ uid })
+      .table("images");
+    return query;
+  }
+
+  static async delImage(uid: number, url: string) {
+    const query = await this.queryBuilder()
+      .delete()
+      .where({ uid, url })
       .table("images");
     return query;
   }

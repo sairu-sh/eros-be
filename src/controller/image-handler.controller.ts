@@ -1,8 +1,12 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import fileUpload from "express-fileupload";
 import * as uploadService from "../service/image-handler.service";
 
-export const imageUploader = async (req: any, res: Response) => {
+export const imageUploader = async (
+  req: any,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const files = req.files?.photo as fileUpload.UploadedFile[];
 
@@ -13,7 +17,7 @@ export const imageUploader = async (req: any, res: Response) => {
     };
 
     if (!files) {
-      throw new Error("No file uploaded");
+      next();
     }
 
     const result = await uploadService.imageUploader(params);
@@ -32,6 +36,18 @@ export const getImage = async (req: any, res: Response) => {
     res.status(200).json(imageUrls);
   } catch (error) {
     console.error("Error getting image:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const deleteImage = async (req: any, res: Response) => {
+  try {
+    const uid: number = req.user.id;
+    const url: string = req.body.url;
+    const imageUrls = await uploadService.delImageUrl(uid, url);
+    res.status(200).json(imageUrls);
+  } catch (error) {
+    console.error("Error deleting image:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

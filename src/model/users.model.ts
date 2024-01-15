@@ -44,7 +44,6 @@ export default class ProjectModel extends BaseModel {
       .select({
         id: "id",
         fullname: "fullname",
-        email: "email",
       })
       .from("users")
       .where({ id })
