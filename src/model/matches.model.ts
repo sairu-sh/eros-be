@@ -4,10 +4,13 @@ import { IMatchParams } from "../interfaces/match.interface";
 export default class MatchModel extends BaseModel {
   static async getAllMatches(id: number) {
     return this.queryBuilder()
-      .select("primary_user", "secondary_user")
+      .select("users.fullname", "matches.secondary_user", "images.url")
+      .distinctOn("images.uid")
       .from("matches")
-      .where("primary_user", "=", id)
-      .as("match");
+      .leftJoin("users", "users.id", "=", "matches.secondary_user")
+      .leftJoin("images", "images.uid", "=", "matches.secondary_user")
+      .where("matches.primary_user", "=", id)
+      .orderBy("images.uid");
   }
 
   static async createMatch(params: IMatchParams) {
