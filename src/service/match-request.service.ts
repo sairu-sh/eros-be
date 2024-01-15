@@ -19,17 +19,25 @@ export const deleteRequest = async (params: IMatchRequest) => {
 };
 
 export const getAllRequests = async (id: number) => {
-  const query = await RequestsModel.getAllRequests(id);
-  if (!query) {
-    throw new BadRequestError("No requests found");
+  try {
+    const query = await RequestsModel.getAllRequests(id);
+    if (!query) {
+      throw new BadRequestError("No requests found");
+    }
+    return query;
+  } catch (e) {
+    return e;
   }
-  return query;
 };
 
 export const getRequest = async (params: IMatchRequest) => {
-  const query = await RequestsModel.getRequest(params);
-  if (!query) {
-    throw new BadRequestError("Request not found");
+  try {
+    const query = await RequestsModel.getRequest(params);
+    if (!query) {
+      throw new BadRequestError("Request not found");
+    }
+    return query;
+  } catch (e) {
+    return null;
   }
-  return query;
 };

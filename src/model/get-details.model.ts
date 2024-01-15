@@ -11,6 +11,7 @@ export default class DetailsModel extends BaseModel {
 
     const userDetails = await this.queryBuilder()
       .select(
+        "users.id",
         "users.fullname",
         "user_details.dob",
         "user_details.bio",
@@ -45,6 +46,7 @@ export default class DetailsModel extends BaseModel {
       .leftJoin("images", "images.uid", "=", "users.id") // Join with images table
       .where("user_details.uid", "=", id)
       .groupBy(
+        "users.id",
         "users.fullname",
         "user_details.dob",
         "user_details.bio",

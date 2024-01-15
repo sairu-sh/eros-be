@@ -5,7 +5,7 @@ export default class RequestsModel extends BaseModel {
   static async getAllRequests(id: number) {
     return this.queryBuilder()
       .select(
-        "users.id",
+        this.queryBuilder().raw("CAST(users.id AS INTEGER) as id"),
         "users.fullname",
         this.queryBuilder()
           .select("url")
@@ -15,9 +15,9 @@ export default class RequestsModel extends BaseModel {
           .as("image_url")
       )
       .table("requests")
-      .leftJoin("users", "requests.receiver_id", "=", "users.id")
+      .leftJoin("users", "requests.sender_id", "=", "users.id")
       .leftJoin("images", "users.id", "=", "images.uid")
-      .where("sender_id", "=", id)
+      .where("receiver_id", "=", id)
       .groupBy("users.id");
   }
 
