@@ -1,4 +1,5 @@
 import BaseModel from "./base-model.model";
+import { IUpdateQuery } from "./../interfaces/update-query.interface";
 
 export default class UserDetailsModel extends BaseModel {
   static async createDetails(params: any) {
@@ -49,6 +50,27 @@ export default class UserDetailsModel extends BaseModel {
       }
       return result;
     } catch (error) {
+      return null;
+    }
+  }
+
+  static async updateDetails(params: IUpdateQuery) {
+    try {
+      const location = await this.queryBuilder()
+        .update({ bio: params.bio, college: params.college })
+        .where({ uid: params.id })
+        .table("user_details")
+        .returning("location");
+
+      console.log(location);
+
+      const result = await this.queryBuilder()
+        .update({ city: params.city })
+        .table("locations")
+        .where({ id: location[0].location });
+      return result;
+    } catch (error) {
+      console.error("Error during user details update:", error);
       return null;
     }
   }

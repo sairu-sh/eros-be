@@ -1,4 +1,5 @@
 import UserDetailsModel from "../model/user-details.model";
+import { IUpdateQuery } from "./../interfaces/update-query.interface";
 import BadRequestError from "../errors/badRequestError";
 
 export const createDetail = async (params: any) => {
@@ -30,4 +31,17 @@ export const createDetail = async (params: any) => {
   }
 
   return status;
+};
+
+export const updateDetails = async (params: IUpdateQuery) => {
+  try {
+    const status = await UserDetailsModel.updateDetails(params);
+    if (!status) {
+      throw new BadRequestError("Details not updated");
+    }
+    return status;
+  } catch (err) {
+    console.error("Error during details update:", err);
+    throw new BadRequestError("Details not updated");
+  }
 };

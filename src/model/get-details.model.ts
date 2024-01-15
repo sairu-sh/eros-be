@@ -33,7 +33,7 @@ export default class DetailsModel extends BaseModel {
       )
       .select(
         this.queryBuilder().raw(
-          "JSONB_AGG(DISTINCT interests.interest) as interests"
+          "JSONB_AGG(DISTINCT jsonb_build_object('id', interests.id, 'interest', interests.interest)) as interests"
         ),
         this.queryBuilder().raw("JSONB_AGG(DISTINCT images.url) as imageUrls")
       )
