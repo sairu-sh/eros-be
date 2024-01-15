@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import * as userDetailService from "../service/user-details.service";
 
 export const createDetails = async (
@@ -10,7 +10,6 @@ export const createDetails = async (
     const uid = req.user.id;
     const params = { ...req.body };
     params.uid = uid;
-    console.log(uid);
     await userDetailService.createDetail(params);
     return res.status(200).json({
       message: "details created successfully",
