@@ -9,6 +9,7 @@ import getDetailsRoutes from "./get-details.routes";
 import imageUploadRoute from "./image-handler.routes";
 import matchRequest from "./match-request.routes";
 import matchesRoutes from "./matches.routes";
+import chatRoutes from "./chats.routes";
 import { auth } from "../middleware/auth.middleware";
 
 const router = Router();
@@ -32,5 +33,7 @@ router.use("/upload-image", auth, imageUploadRoute);
 router.use("/request", auth, matchRequest);
 
 router.use("/match", auth, matchesRoutes);
+
+router.use("/chats", auth, chatRoutes);
 
 export default router;
