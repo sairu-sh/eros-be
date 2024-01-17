@@ -3,7 +3,6 @@ import ChatModel from "../model/chats.model";
 
 export const getChats = async (params: IChatParams) => {
   try {
-    console.log("service");
     return await ChatModel.getAllChats(params);
   } catch {
     return null;

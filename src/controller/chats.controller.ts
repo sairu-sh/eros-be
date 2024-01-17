@@ -21,7 +21,6 @@ export const insertChat = async (req: any, res: Response) => {
     secondaryUser,
     content: req.body.content,
   };
-  console.log(params);
   try {
     const data = await createChat(params);
     if (data)
@@ -29,6 +28,7 @@ export const insertChat = async (req: any, res: Response) => {
         message: "success",
         data: data,
       });
-  } catch {}
-  res.json({ message: "error" });
+  } catch {
+    res.json({ message: "error" });
+  }
 };
